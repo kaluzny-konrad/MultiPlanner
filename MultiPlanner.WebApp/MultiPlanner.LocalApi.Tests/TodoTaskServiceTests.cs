@@ -1,10 +1,11 @@
 namespace MultiPlanner.LocalApi.Tests
 {
-    public class Tests
+    public class TodoTaskServiceTests
     {
         [SetUp]
         public void Setup()
         {
+
         }
 
         [Test]
