@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiPlanner.WebApp", "Mult
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiPlanner.LocalApi", "MultiPlanner.LocalApi\MultiPlanner.LocalApi.csproj", "{73C3E4C6-855C-4DA3-B283-6D0495CFFC27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiPlanner.LocalApi.Tests", "MultiPlanner.LocalApi.Tests\MultiPlanner.LocalApi.Tests.csproj", "{6CCECD90-8D97-4877-95A9-490E42640F6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiPlanner.WebApp.Tests", "MultiPlanner.WebApp.Tests\MultiPlanner.WebApp.Tests.csproj", "{64779509-BAF7-488F-9589-2447967F2A9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{73C3E4C6-855C-4DA3-B283-6D0495CFFC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73C3E4C6-855C-4DA3-B283-6D0495CFFC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73C3E4C6-855C-4DA3-B283-6D0495CFFC27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CCECD90-8D97-4877-95A9-490E42640F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CCECD90-8D97-4877-95A9-490E42640F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CCECD90-8D97-4877-95A9-490E42640F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CCECD90-8D97-4877-95A9-490E42640F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64779509-BAF7-488F-9589-2447967F2A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64779509-BAF7-488F-9589-2447967F2A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64779509-BAF7-488F-9589-2447967F2A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64779509-BAF7-488F-9589-2447967F2A9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
