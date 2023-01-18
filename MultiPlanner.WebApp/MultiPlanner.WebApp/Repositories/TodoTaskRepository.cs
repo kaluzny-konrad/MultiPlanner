@@ -1,10 +1,12 @@
-﻿using MultiPlanner.LocalApi.Shared;
+﻿using MultiPlanner.WebApp.Shared;
 
-namespace MultiPlanner.LocalApi.Repositories
+namespace MultiPlanner.WebApp.Repositories
 {
     public interface ITodoTaskRepository
     {
         IEnumerable<TodoTask> GetAll();
+        IEnumerable<TodoTask> GetAllByUserId(Guid userId);
+
         TodoTask? GetById(int id);
         TodoTask? Add(TodoTask entity);
         TodoTask? Update(TodoTask entity);
@@ -23,6 +25,12 @@ namespace MultiPlanner.LocalApi.Repositories
         public IEnumerable<TodoTask> GetAll()
         {
             return _dbContext.TodoTasks;
+        }
+
+        public IEnumerable<TodoTask> GetAllByUserId(Guid userId)
+        {
+            return _dbContext.TodoTasks
+                .Where(e => e.UserId == userId);
         }
 
         public TodoTask? GetById(int id)
