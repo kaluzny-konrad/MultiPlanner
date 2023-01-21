@@ -1,0 +1,55 @@
+﻿@page "/Tasks"
+@using MultiPlanner.WebApp.Controllers;
+@using MultiPlanner.WebApp.Data;
+
+@code {
+    [Inject]
+    private TasksController _controller { get; set; } = default!;
+
+    private TasksViewModel _tasksViewModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var guid = Guid.Parse("00000000-0000-0000-0000-000000000000");
+        _tasksViewModel = _controller.GetTasks(guid);
+    }
+}
+
+<PageTitle>TodoTaskList</PageTitle>
+
+<h3>TodoTaskList</h3>
+
+<table class="table mb-4">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">ShortDescription</th>
+            <th scope="col">Status</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var todo in _tasksViewModel.Tasks)
+    {
+        @if(todo != null)
+        {
+            <tr>
+                <th scope="row">@todo.TodoTaskId</th>
+                <td>@todo.Title</td>
+                <td>@todo.ShortDescription</td>
+                <td>@todo.Status</td>
+                <td>@todo.PlannedDeadline</td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-success ms-1">Finished</button>
+                </td>
+            </tr>
+        }
+
+    }
+    </tbody>
+</table>

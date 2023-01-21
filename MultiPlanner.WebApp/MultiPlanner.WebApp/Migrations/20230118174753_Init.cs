@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Add-Migration Init
+// Update-Database
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

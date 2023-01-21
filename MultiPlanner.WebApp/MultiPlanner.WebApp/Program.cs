@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MultiPlanner.WebApp.Controllers;
 using MultiPlanner.WebApp.Repositories;
 using MultiPlanner.WebApp.Services;
 
@@ -12,12 +13,9 @@ builder.Services.AddDbContext<LocalApiDbContext>(options => {
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
-builder.Services.AddScoped<ITodoTaskStatusRepository, TodoTaskStatusRepository>();
-
-builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
-builder.Services.AddScoped<ITodoTaskStatusService, TodoTaskStatusService>();
-builder.Services.AddScoped<ITodoTaskListService, TodoTaskListService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<TasksController>();
 
 var app = builder.Build();
 
