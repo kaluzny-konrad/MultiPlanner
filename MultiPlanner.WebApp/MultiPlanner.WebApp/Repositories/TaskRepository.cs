@@ -2,22 +2,21 @@
 
 namespace MultiPlanner.WebApp.Repositories
 {
-    public interface ITodoTaskRepository
+    public interface ITaskRepository
     {
         IEnumerable<TodoTask> GetAll();
         IEnumerable<TodoTask> GetAllByUserId(Guid userId);
-
         TodoTask? GetById(int id);
         TodoTask? Add(TodoTask entity);
         TodoTask? Update(TodoTask entity);
         TodoTask? DeleteById(int id);
     }
 
-    public class TodoTaskRepository : ITodoTaskRepository
+    public class TaskRepository : ITaskRepository
     {
         private readonly LocalApiDbContext _dbContext;
 
-        public TodoTaskRepository
+        public TaskRepository
             (LocalApiDbContext dbContext) 
         {
             _dbContext = dbContext;

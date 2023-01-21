@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MultiPlanner.WebApp.Repositories;
 
@@ -11,9 +12,11 @@ using MultiPlanner.WebApp.Repositories;
 namespace MultiPlanner.WebApp.Migrations
 {
     [DbContext(typeof(LocalApiDbContext))]
-    partial class LocalApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121135130_oneRepo")]
+    partial class oneRepo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,9 +37,6 @@ namespace MultiPlanner.WebApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("PlannedDeadline")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ShortDescription")
@@ -61,9 +61,8 @@ namespace MultiPlanner.WebApp.Migrations
                         new
                         {
                             TodoTaskId = 1,
-                            AddedDateTime = new DateTime(2023, 1, 21, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9804),
-                            ModifiedDateTime = new DateTime(2023, 1, 21, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9805),
-                            PlannedDeadline = new DateTime(2023, 1, 23, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9805),
+                            AddedDateTime = new DateTime(2023, 1, 21, 13, 51, 30, 847, DateTimeKind.Utc).AddTicks(7849),
+                            ModifiedDateTime = new DateTime(2023, 1, 21, 13, 51, 30, 847, DateTimeKind.Utc).AddTicks(7850),
                             ShortDescription = "test",
                             Status = 1,
                             Title = "test",
@@ -72,9 +71,8 @@ namespace MultiPlanner.WebApp.Migrations
                         new
                         {
                             TodoTaskId = 2,
-                            AddedDateTime = new DateTime(2023, 1, 21, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9836),
-                            ModifiedDateTime = new DateTime(2023, 1, 21, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9837),
-                            PlannedDeadline = new DateTime(2023, 1, 26, 14, 3, 42, 491, DateTimeKind.Utc).AddTicks(9837),
+                            AddedDateTime = new DateTime(2023, 1, 21, 13, 51, 30, 847, DateTimeKind.Utc).AddTicks(7907),
+                            ModifiedDateTime = new DateTime(2023, 1, 21, 13, 51, 30, 847, DateTimeKind.Utc).AddTicks(7908),
                             ShortDescription = "test",
                             Status = 2,
                             Title = "test",

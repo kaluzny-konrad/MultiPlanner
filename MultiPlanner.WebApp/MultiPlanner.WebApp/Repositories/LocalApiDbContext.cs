@@ -10,7 +10,6 @@ public class LocalApiDbContext : DbContext
     : base(options) { }
 
     public DbSet<TodoTask> TodoTasks { get; set; }
-    public DbSet<TodoTaskStatus> TodoTaskStatuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,6 +22,10 @@ public class LocalApiDbContext : DbContext
                 UserId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
                 Title = "test",
                 ShortDescription = "test",
+                AddedDateTime = DateTime.UtcNow,
+                ModifiedDateTime = DateTime.UtcNow,
+                Status = TaskStatuses.ToDo,
+                PlannedDeadline = DateTime.UtcNow.AddDays(2),
             });
 
         modelBuilder.Entity<TodoTask>()
@@ -32,33 +35,10 @@ public class LocalApiDbContext : DbContext
                 UserId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
                 Title = "test",
                 ShortDescription = "test",
-            });
-
-        modelBuilder.Entity<TodoTaskStatus>()
-            .HasData(new TodoTaskStatus
-            {
-                TodoTaskStatusId = 1,
-                TodoTaskId = 1,
-                AddedDateTime = DateTime.UtcNow.AddDays(-1),
-                Status = TaskStatuses.ToDo
-            });
-
-        modelBuilder.Entity<TodoTaskStatus>()
-            .HasData(new TodoTaskStatus
-            {
-                TodoTaskStatusId = 2,
-                TodoTaskId = 1,
                 AddedDateTime = DateTime.UtcNow,
-                Status = TaskStatuses.InProgress
-            });
-
-        modelBuilder.Entity<TodoTaskStatus>()
-            .HasData(new TodoTaskStatus
-            {
-                TodoTaskStatusId = 3,
-                TodoTaskId = 2,
-                AddedDateTime = DateTime.UtcNow,
-                Status = TaskStatuses.ToDo
+                ModifiedDateTime = DateTime.UtcNow,
+                Status = TaskStatuses.InProgress,
+                PlannedDeadline = DateTime.UtcNow.AddDays(5),
             });
     }
 }
