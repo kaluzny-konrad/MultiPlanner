@@ -1,7 +1,7 @@
 ﻿using Moq;
 using MultiPlanner.WebApp.Repositories;
 using MultiPlanner.WebApp.Services;
-using MultiPlanner.WebApp.Shared;
+using MultiPlanner.WebApp.Entities;
 
 namespace MultiPlanner.WebApp.Tests;
 
