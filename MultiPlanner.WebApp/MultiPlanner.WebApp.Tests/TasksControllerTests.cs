@@ -1,7 +1,9 @@
 using Moq;
 using MultiPlanner.WebApp.Services;
-using MultiPlanner.WebApp.Shared;
+using MultiPlanner.WebApp.Entities;
 using MultiPlanner.WebApp.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using MultiPlanner.WebApp.Models;
 
 namespace MultiPlanner.WebApp.Tests
 {
@@ -37,15 +39,29 @@ namespace MultiPlanner.WebApp.Tests
         private static readonly List<TodoTask> _userTasks = new () { _taskOne, _taskTwo };
 
         [Test]
-        public void TasksController_GetTasks_Returns_ListForUser()
+        public void TasksController_GetTasks_Returns_TasksViewModel()
         {
             _taskServiceMock
                 .Setup(r => r.GetTasks(_userId))
                 .Returns(_userTasks);
 
-            var tasks = _controller.GetTasks(_userId);
+            var viewResult = _controller.Index(_userId) as ViewResult;
+            var model = viewResult?.Model as TasksViewModel;
 
-            Assert.That(tasks.Tasks, Has.Count.EqualTo(2));
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model.Tasks, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public void TaskController_GetTasks_Returns_TasksIndexView()
+        {
+            _taskServiceMock
+                .Setup(r => r.GetTasks(_userId))
+                .Returns(_userTasks);
+
+            var viewResult = _controller.Index(_userId) as ViewResult;
+
+            Assert.That(viewResult?.ViewName == "Index");
         }
     }
 }

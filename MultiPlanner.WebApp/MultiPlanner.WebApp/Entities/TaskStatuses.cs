@@ -1,4 +1,4 @@
-﻿namespace MultiPlanner.WebApp.Shared;
+﻿namespace MultiPlanner.WebApp.Entities;
 
 public enum TaskStatuses
 {

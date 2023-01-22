@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiPlanner.WebApp", "MultiPlanner.WebApp\MultiPlanner.WebApp.csproj", "{73615109-1817-4E58-ABF5-F34DA29EF238}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiPlanner.WebApp.Tests", "MultiPlanner.WebApp.Tests\MultiPlanner.WebApp.Tests.csproj", "{64779509-BAF7-488F-9589-2447967F2A9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiPlanner.WebApp", "MultiPlanner.WebApp\MultiPlanner.WebApp.csproj", "{7C537904-5162-4363-BE75-1A46A3A66EBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73615109-1817-4E58-ABF5-F34DA29EF238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73615109-1817-4E58-ABF5-F34DA29EF238}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73615109-1817-4E58-ABF5-F34DA29EF238}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73615109-1817-4E58-ABF5-F34DA29EF238}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64779509-BAF7-488F-9589-2447967F2A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64779509-BAF7-488F-9589-2447967F2A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64779509-BAF7-488F-9589-2447967F2A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64779509-BAF7-488F-9589-2447967F2A9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C537904-5162-4363-BE75-1A46A3A66EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C537904-5162-4363-BE75-1A46A3A66EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C537904-5162-4363-BE75-1A46A3A66EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C537904-5162-4363-BE75-1A46A3A66EBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

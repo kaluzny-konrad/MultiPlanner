@@ -1,0 +1,52 @@
+﻿@model TasksViewModel
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<h3>Tasks</h3>
+
+<table class="table mb-4">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">ShortDescription</th>
+            <th scope="col">Status</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Tasks)
+        {
+            @if (task != null)
+            {
+                <tr>
+                    <th scope="row">@task.TodoTaskId</th>
+                    <td>@task.Title</td>
+                    <td>@task.ShortDescription</td>
+                    <td>@task.Status</td>
+                    <td>@task.PlannedDeadline</td>
+                    <td>
+                        <button type="submit" class="btn btn-primary" 
+                            asp-controller="task" asp-action="edit"
+                            asp-route-todoTaskId="@task.TodoTaskId">
+                            Edit
+                        </button>
+                        <button type="submit" class="btn btn-danger"
+                            asp-controller="task" asp-action="delete"
+                            asp-route-todoTaskId="@task.TodoTaskId">
+                            Delete
+                        </button>
+                        <button type="submit" class="btn btn-success ms-1"
+                            asp-controller="task" asp-action="finish"
+                            asp-route-todoTaskId="@task.TodoTaskId">
+                            Finished
+                        </button>
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
