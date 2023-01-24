@@ -39,29 +39,34 @@ namespace MultiPlanner.WebApp.Tests
         private static readonly List<TodoTask> _userTasks = new () { _taskOne, _taskTwo };
 
         [Test]
-        public void TasksController_GetTasks_Returns_TasksViewModel()
+        public void TasksController_Index_Returns_TasksView()
         {
             _taskServiceMock
                 .Setup(r => r.GetTasks(_userId))
                 .Returns(_userTasks);
 
             var viewResult = _controller.Index(_userId) as ViewResult;
-            var model = viewResult?.Model as TasksViewModel;
 
+            var model = viewResult?.Model as TasksViewModel;
             Assert.That(model, Is.Not.Null);
             Assert.That(model.Tasks, Has.Count.EqualTo(2));
+            Assert.That(viewResult?.ViewName == "Index");
         }
 
         [Test]
-        public void TaskController_GetTasks_Returns_TasksIndexView()
+        public void TasksController_Details_IfTaskExists_Returns_DetailsView()
         {
+            var todoTaskId = _taskOne.TodoTaskId;
             _taskServiceMock
-                .Setup(r => r.GetTasks(_userId))
-                .Returns(_userTasks);
+                .Setup(r => r.GetTask(todoTaskId))
+                .Returns(_taskOne);
 
-            var viewResult = _controller.Index(_userId) as ViewResult;
+            var viewResult = _controller.Details(todoTaskId) as ViewResult;
 
-            Assert.That(viewResult?.ViewName == "Index");
+            var model = viewResult?.Model as TaskDetailsViewModel;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model.Task, Is.EqualTo(_taskOne));
+            Assert.That(viewResult?.ViewName == "Details");
         }
     }
 }

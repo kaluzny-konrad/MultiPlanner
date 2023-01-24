@@ -22,4 +22,15 @@ public class TasksController : Controller
         };
         return View("Index", todoTaskList);
     }
+
+    public IActionResult Details(int todoTaskId)
+    {
+        var task = _todoTaskService.GetTask(todoTaskId);
+        if (task == null) return View("NotFound");
+        TaskDetailsViewModel taskDetails = new()
+        {
+            Task = task
+        };
+        return View("Details", taskDetails);
+    }
 }

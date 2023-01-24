@@ -16,7 +16,7 @@ public class TaskServiceTests
     private readonly Guid _userId = Guid.NewGuid();
 
     [Test]
-    public void TaskService_GetTodoTasks_IfUserHasTasks_ReturnsAll()
+    public void TaskService_GetTasks_IfUserHasTasks_ReturnsAll()
     {
         _repositoryMock.Setup(r => r.GetAllByUserId(_userId)).Returns(_tasks);
         var result = _service.GetTasks(_userId).ToList();
@@ -25,10 +25,29 @@ public class TaskServiceTests
     }
 
     [Test]
-    public void TaskService_GetTodoTasks_IfUserHasNoTasks_ReturnsEmptyList()
+    public void TaskService_GetTasks_IfUserHasNoTasks_ReturnsEmptyList()
     {
         _repositoryMock.Setup(r => r.GetAllByUserId(_userId)).Returns(new List<TodoTask>());
         var result = _service.GetTasks(_userId).ToList();
         Assert.That(result, Is.Empty);
+    }
+
+    [Test]
+    public void TaskService_GetTask_IfExists_ReturnsTask()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.GetById(task.TodoTaskId)).Returns(task);
+        var result = _service.GetTask(task.TodoTaskId);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Is.EqualTo(task));
+    }
+
+    [Test]
+    public void TaskService_GetTask_IfNotExists_ReturnsNull()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.GetById(task.TodoTaskId)).Returns(value: null);
+        var result = _service.GetTask(task.TodoTaskId);
+        Assert.That(result, Is.Null);
     }
 }
