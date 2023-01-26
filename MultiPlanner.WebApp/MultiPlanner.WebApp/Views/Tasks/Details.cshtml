@@ -9,7 +9,7 @@
 @if(Model.Task != null && Model.Task.TodoTaskId != 0) {
     var task = @Model.Task;
 
-    <form asp-controller="tasks" asp-action="update"
+    <form asp-controller="tasks" asp-action="details"
       asp-route-todoTaskId="@task.TodoTaskId">
         <label for="Title">Title</label>
         <input type="text" name="Title" asp-for="Title"/>

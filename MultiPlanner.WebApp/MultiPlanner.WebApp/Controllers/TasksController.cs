@@ -36,38 +36,29 @@ public class TasksController : Controller
         return View("Details", taskDetails);
     }
 
-    public IActionResult Update(int todoTaskId)
+    [HttpPost]
+    public IActionResult Details(int todoTaskId, [Bind("Title")] TaskDetailsViewModel viewModel)
     {
         var task = _todoTaskService.GetTask(todoTaskId);
         if (task == null) return NotFound();
 
         try
         {
-            var title = HttpContext.Request.Form["Title"].FirstOrDefault();
-            if (title == null || title == "") ModelState.AddModelError("Title",
+            if (viewModel.Title == null || viewModel.Title == "") ModelState.AddModelError("Title",
                     "Title should not be empty.");
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            task.Title = title;
+            task.Title = viewModel.Title;
 
             var updatedTask = _todoTaskService.UpdateTask(task);
             if (updatedTask == null) return RedirectToAction("Index");
-            TaskDetailsViewModel taskDetails = BuildTaskDetailsViewModel(updatedTask);
+            var taskDetails = TaskDetailsViewModel.Build(updatedTask);
             return View("Details", taskDetails);
         }
         catch (Exception)
         {
             return RedirectToAction("Index");
         }
-    }
-
-    private static TaskDetailsViewModel BuildTaskDetailsViewModel(TodoTask? updatedTask)
-    {
-        return new()
-        {
-            Task = updatedTask,
-            Title = updatedTask.Title
-        };
     }
 }
