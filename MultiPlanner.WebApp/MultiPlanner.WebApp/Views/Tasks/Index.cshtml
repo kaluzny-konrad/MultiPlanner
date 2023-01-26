@@ -28,25 +28,12 @@
                     <td>@task.Status</td>
                     <td>@task.PlannedDeadline</td>
                     <td>
-                        <button type="submit" class="btn btn-primary" 
-                            asp-controller="task" asp-action="edit"
-                            asp-route-todoTaskId="@task.TodoTaskId">
-                            Edit
-                        </button>
-                        <button type="submit" class="btn btn-danger"
-                            asp-controller="task" asp-action="delete"
-                            asp-route-todoTaskId="@task.TodoTaskId">
-                            Delete
-                        </button>
-                        <button type="submit" class="btn btn-success ms-1"
-                            asp-controller="task" asp-action="finish"
-                            asp-route-todoTaskId="@task.TodoTaskId">
-                            Finished
-                        </button>
+                        <a type="button" class="btn btn-primary" 
+                        asp-controller="tasks" asp-action="details"
+                        asp-route-todoTaskId="@task.TodoTaskId">Edit</a>
                     </td>
                 </tr>
             }
-
         }
     </tbody>
 </table>

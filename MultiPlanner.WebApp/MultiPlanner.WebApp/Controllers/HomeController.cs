@@ -20,8 +20,8 @@ public class HomeController : Controller
 
     public IActionResult NotFound(string message)
     {
-        var NotFoundViewModel = new NotFoundViewModel(message);
-        return View("NotFound");
+        var notFoundViewModel = new NotFoundViewModel(message);
+        return View("NotFound", notFoundViewModel);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

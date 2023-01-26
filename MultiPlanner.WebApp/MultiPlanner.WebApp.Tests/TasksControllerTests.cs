@@ -44,12 +44,13 @@ namespace MultiPlanner.WebApp.Tests
             _taskServiceMock
                 .Setup(r => r.GetTasks(_userId))
                 .Returns(_userTasks);
+            var tasksCount = _userTasks.Count();
 
             var viewResult = _controller.Index(_userId) as ViewResult;
 
             var model = viewResult?.Model as TasksViewModel;
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.Tasks, Has.Count.EqualTo(2));
+            Assert.That(model.Tasks, Has.Count.EqualTo(tasksCount));
             Assert.That(viewResult?.ViewName == "Index");
         }
 

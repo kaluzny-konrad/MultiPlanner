@@ -5,7 +5,9 @@ namespace MultiPlanner.WebApp.Services;
 
 public interface ITaskService
 {
+    TodoTask? RemoveTask(int todoTaskId);
     TodoTask? GetTask(int todoTaskId);
+    TodoTask? UpdateTask(TodoTask todoTask);
     IEnumerable<TodoTask> GetTasks(Guid userId);
 }
 
@@ -27,6 +29,18 @@ public class TaskService : ITaskService
     public TodoTask? GetTask(int todoTaskId)
     {
         var result = _repository.GetById(todoTaskId);
+        return result;
+    }
+
+    public TodoTask? RemoveTask(int todoTaskId)
+    {
+        var result = _repository.RemoveById(todoTaskId);
+        return result;
+    }
+
+    public TodoTask? UpdateTask(TodoTask todoTask)
+    {
+        var result = _repository.Update(todoTask);
         return result;
     }
 }

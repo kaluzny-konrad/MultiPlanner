@@ -50,4 +50,42 @@ public class TaskServiceTests
         var result = _service.GetTask(task.TodoTaskId);
         Assert.That(result, Is.Null);
     }
+
+    [Test]
+    public void TaskService_RemoveTask_IfExists_ReturnsTask()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.RemoveById(task.TodoTaskId)).Returns(task);
+        var result = _service.RemoveTask(task.TodoTaskId);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Is.EqualTo(task));
+    }
+
+    [Test]
+    public void TaskService_RemoveTask_IfNotExists_ReturnsNull()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.RemoveById(task.TodoTaskId)).Returns(value: null);
+        var result = _service.RemoveTask(task.TodoTaskId);
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
+    public void TaskService_UpdateTask_IfExists_ReturnsTask()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.Update(task)).Returns(task);
+        var result = _service.UpdateTask(task);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result, Is.EqualTo(task));
+    }
+
+    [Test]
+    public void TaskService_UpdateTask_IfNotExists_ReturnsNull()
+    {
+        var task = _tasks.First();
+        _repositoryMock.Setup(r => r.Update(task)).Returns(value: null);
+        var result = _service.UpdateTask(task);
+        Assert.That(result, Is.Null);
+    }
 }

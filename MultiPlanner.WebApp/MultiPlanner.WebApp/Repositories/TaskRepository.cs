@@ -9,7 +9,7 @@ public interface ITaskRepository
     TodoTask? GetById(int id);
     TodoTask? Add(TodoTask entity);
     TodoTask? Update(TodoTask entity);
-    TodoTask? DeleteById(int id);
+    TodoTask? RemoveById(int id);
 }
 
 public class TaskRepository : ITaskRepository
@@ -21,47 +21,60 @@ public class TaskRepository : ITaskRepository
     {
         _dbContext = dbContext;
     }
+
     public IEnumerable<TodoTask> GetAll()
     {
-        return _dbContext.TodoTasks;
+        return _dbContext.TodoTasks.Select(t => t.ShallowCopy());
     }
 
     public IEnumerable<TodoTask> GetAllByUserId(Guid userId)
     {
-        return _dbContext.TodoTasks
-            .Where(e => e.UserId == userId);
+        return _dbContext.TodoTasks.Where(e => e.UserId == userId)
+            .Select(t => t.ShallowCopy());
     }
 
     public TodoTask? GetById(int id)
     {
-        return _dbContext.TodoTasks
-            .FirstOrDefault(e => e.TodoTaskId == id);
+        return GetByIdContext(id)?.ShallowCopy();
+    }
+
+    private TodoTask? GetByIdContext(int id)
+    {
+        return _dbContext.TodoTasks.FirstOrDefault(e => e.TodoTaskId == id);
     }
 
     public TodoTask? Add(TodoTask entity)
     {
         var addedEntity = _dbContext.TodoTasks.Add(entity);
         if (_dbContext.SaveChanges() > 0)
-            return addedEntity.Entity;
+            return addedEntity.Entity?.ShallowCopy();
         return null;
     }
 
     public TodoTask? Update(TodoTask entity)
     {
-        var updatedEntity = GetById(entity.TodoTaskId);
+        var updatedEntity = GetByIdContext(entity.TodoTaskId);
         if (updatedEntity == null) return null;
+
+        updatedEntity.Title = entity.Title;
+        updatedEntity.ShortDescription = entity.ShortDescription;
+        updatedEntity.PlannedDeadline = entity.PlannedDeadline;
+        updatedEntity.Status = entity.Status;
+        updatedEntity.ModifiedDateTime = DateTime.Now;
+
         if (_dbContext.SaveChanges() > 0)
-            return updatedEntity;
+            return updatedEntity?.ShallowCopy();
         return null;
     }
 
-    public TodoTask? DeleteById(int id)
+    public TodoTask? RemoveById(int id)
     {
-        var deletedEntity = GetById(id);
-        if (deletedEntity == null) return null;
-        _dbContext.TodoTasks.Remove(deletedEntity);
-        if (_dbContext.SaveChanges() > 0)
-            return deletedEntity;
-        return null;
+        var RemovedEntity = GetByIdContext(id);
+        if (RemovedEntity == null) return null;
+
+        RemovedEntity.Status = TaskStatuses.Removed;
+
+        _dbContext.SaveChanges();
+        return RemovedEntity?.ShallowCopy();
     }
 }
