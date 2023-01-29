@@ -13,7 +13,7 @@ namespace MultiPlanner.WebApp.Tests
         private static readonly Mock<ITaskRepository> _taskRepositoryMock = new();
         private readonly TasksController _controller = new(_taskRepositoryMock.Object);
 
-        private static readonly Guid _userId = Guid.NewGuid();
+        private static readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
         private static readonly TodoTask _taskOne = new()
         {
@@ -47,12 +47,28 @@ namespace MultiPlanner.WebApp.Tests
                 .Returns(_userTasks);
             var tasksCount = _userTasks.Count;
 
-            var viewResult = _controller.Index(_userId) as ViewResult;
+            var viewResult = _controller.Index() as ViewResult;
 
-            var model = viewResult?.Model as TasksViewModel;
+            var model = viewResult?.Model as List<TodoTask>;
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.Tasks, Has.Count.EqualTo(tasksCount));
-            Assert.That(viewResult?.ViewName == "Index");
+            Assert.That(model, Has.Count.EqualTo(tasksCount));
+            Assert.That(viewResult?.ViewName, Is.EqualTo("Index"));
+        }
+
+        [Test]
+        public void TasksController_Index_IfUserHasNotTasks_Returns_EmptyTasksView()
+        {
+            _taskRepositoryMock
+                .Setup(r => r.GetAll(_userId))
+                .Returns(new List<TodoTask>());
+            var tasksCount = 0;
+
+            var viewResult = _controller.Index() as ViewResult;
+
+            var model = viewResult?.Model as List<TodoTask>;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model, Has.Count.EqualTo(tasksCount));
+            Assert.That(viewResult?.ViewName, Is.EqualTo("Index"));
         }
 
         [Test]
@@ -65,10 +81,22 @@ namespace MultiPlanner.WebApp.Tests
 
             var viewResult = _controller.Details(todoTaskId) as ViewResult;
 
-            var model = viewResult?.Model as TaskDetailsViewModel;
+            var model = viewResult?.Model as TodoTask;
             Assert.That(model, Is.Not.Null);
             Assert.That(model.TodoTaskId, Is.EqualTo(_taskOne.TodoTaskId));
-            Assert.That(viewResult?.ViewName == "Details");
+            Assert.That(viewResult?.ViewName, Is.EqualTo("Details"));
+        }
+
+        [Test]
+        public void TasksController_Details_IfTaskNotExists_Returns_NotFound()
+        {
+            var todoTaskId = _taskOne.TodoTaskId;
+            _taskRepositoryMock
+                .Setup(r => r.Get(todoTaskId))
+                .Returns(value: null);
+
+            var viewResult = _controller.Details(todoTaskId) as RedirectToActionResult;
+            Assert.That(viewResult?.ActionName, Is.EqualTo("NotFound"));
         }
     }
 }

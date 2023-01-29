@@ -19,12 +19,11 @@ public class TasksController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var entities = _repository.GetAll(_userId).ToList();
-        TasksViewModel entitiesIndex = new()
-        {
-            Tasks = entities
-        };
-        return View("Index", entitiesIndex);
+        var entities = _repository
+            .GetAll(_userId)
+            .Where(e => e.Status != TaskStatuses.Removed)
+            .ToList();
+        return View("Index", entities);
     }
 
     // GET: /Tasks/Details/5
@@ -33,84 +32,42 @@ public class TasksController : Controller
     {
         var task = _repository.Get(id);
         if (task == null) return RedirectToAction("NotFound", "Home");
-        var details = TaskDetailsViewModel.Build(task);
-        return View("Details", details);
+        return View("Details", task);
+    }
+
+    // POST: /Tasks/Details/5
+    [HttpPost]
+    public IActionResult Details(int id, [Bind] TodoTask todoTask)
+    {
+        todoTask.TodoTaskId = id;
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                if (todoTask.TodoTaskId == 0)
+                {
+                    todoTask.UserId = _userId;
+                    _repository.Insert(todoTask);
+                }
+                else
+                    _repository.Update(todoTask);
+                _repository.Save();
+                return RedirectToAction("Index");
+            }
+        }
+        catch (DataException)
+        {
+            ModelState.AddModelError(string.Empty, "Unable to save changes.");
+        }
+
+        return View("Details", todoTask);
     }
 
     // GET: /Tasks/Create
     [HttpGet]
     public IActionResult Create()
     {
-        var details = new TaskDetailsViewModel();
-        return View("Details", details);
-    }
-
-    // POST: /Tasks/Update/5
-    [HttpPost]
-    public IActionResult Update(int id,
-        [Bind(include: "Title, ShortDescription, PlannedDeadline, Status")]
-        TaskDetailsViewModel viewModel)
-    {
-        if(viewModel.Title == "") ModelState.AddModelError("Title", "Title should not be empty.");
-
-        try
-        {
-            var entity = _repository.Get(id);
-            entity ??= new TodoTask() { UserId = _userId };
-
-            if (ModelState.IsValid)
-            {
-                entity.Title = viewModel.Title;
-                entity.ShortDescription = viewModel.ShortDescription;
-                entity.PlannedDeadline = viewModel.PlannedDeadline;
-                entity.Status = viewModel.Status;
-                
-                if (entity.TodoTaskId == 0)
-                    _repository.Insert(entity);
-                else
-                    _repository.Update(entity);
-                _repository.Save();
-            }
-            else
-            {
-                return View("Details", viewModel);
-            }
-        }
-        catch (DataException)
-        {
-            ModelState.AddModelError(string.Empty, "Unable to save changes.");
-            return View("Details", viewModel);
-        }
-
-        return RedirectToAction("Index");
-    }
-
-    // GET: /Tasks/Delete/5
-    public ActionResult Delete(bool? saveChangesError = false, int id = 0)
-    {
-        if (saveChangesError.GetValueOrDefault())
-        {
-            ViewBag.ErrorMessage = "Delete failed, try again.";
-        }
-        var entity = _repository.Get(id);
-        return View("Delete", entity);
-    }
-
-    // POST: /Tasks/Delete/5
-    [HttpPost]
-    public ActionResult Delete(int id)
-    {
-        try
-        {
-            _repository.Get(id);
-            _repository.Delete(id);
-            _repository.Save();
-        }
-        catch (DataException)
-        {
-            return RedirectToAction("Delete", new { id, saveChangesError = true });
-        }
-        return RedirectToAction("Index");
+        return View("Details", new TodoTask());
     }
 
     protected override void Dispose(bool disposing)
