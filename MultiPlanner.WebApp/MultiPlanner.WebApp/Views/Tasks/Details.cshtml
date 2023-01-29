@@ -6,14 +6,39 @@
 }
 
 <h3>Task</h3>
-@if(Model.Task != null && Model.Task.TodoTaskId != 0) {
-    var task = @Model.Task;
 
-    <form asp-controller="tasks" asp-action="details"
-      asp-route-todoTaskId="@task.TodoTaskId">
+<form asp-controller="tasks" asp-action="update"
+        asp-route-id="@Model.TodoTaskId">
+
+    <div class="form-group">
         <label for="Title">Title</label>
-        <input type="text" name="Title" asp-for="Title"/>
+        <input type="text" class="form-control" name="Title" 
+            asp-for="Title" />
+    </div>
 
-        <input type="submit" name="submit" />
-    </form>
-}
+    <div class="form-group">
+        <label for="ShortDescription">Short Description</label>
+        <input type="text" class="form-control" name="ShortDescription"
+            asp-for="ShortDescription" />
+    </div>
+
+    <div class="form-group">
+        <label for="PlannedDeadline">Planned Deadline</label>
+        <input type="datetime-local" class="form-control" name="PlannedDeadline" 
+            asp-for="PlannedDeadline" />
+    </div>
+
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <select class="form-control" name="Status" 
+            asp-for="Status">
+            <option value="0">Removed</option>
+            <option value="1">ToDo</option>
+            <option value="2">In Progress</option>
+            <option value="3">Success</option>
+            <option value="4">Failed</option>
+        </select>
+    </div>
+
+    <input type="submit" class="btn btn-primary" name="submit" value="Save changes" />
+</form>

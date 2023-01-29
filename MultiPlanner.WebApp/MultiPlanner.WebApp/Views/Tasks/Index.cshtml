@@ -30,10 +30,12 @@
                     <td>
                         <a type="button" class="btn btn-primary" 
                         asp-controller="tasks" asp-action="details"
-                        asp-route-todoTaskId="@task.TodoTaskId">Edit</a>
+                        asp-route-id="@task.TodoTaskId">Edit</a>
                     </td>
                 </tr>
             }
         }
     </tbody>
 </table>
+<a type="button" class="btn btn-primary"
+   asp-controller="tasks" asp-action="create">Add new task</a>

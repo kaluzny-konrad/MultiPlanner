@@ -1,16 +1,17 @@
 using Moq;
-using MultiPlanner.WebApp.Services;
+using Microsoft.AspNetCore.Mvc;
+
 using MultiPlanner.WebApp.Entities;
 using MultiPlanner.WebApp.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using MultiPlanner.WebApp.Models;
+using MultiPlanner.WebApp.DAL;
 
 namespace MultiPlanner.WebApp.Tests
 {
     public class TasksControllerTests
     {
-        private static readonly Mock<ITaskService> _taskServiceMock = new();
-        private readonly TasksController _controller = new(_taskServiceMock.Object);
+        private static readonly Mock<ITaskRepository> _taskRepositoryMock = new();
+        private readonly TasksController _controller = new(_taskRepositoryMock.Object);
 
         private static readonly Guid _userId = Guid.NewGuid();
 
@@ -41,10 +42,10 @@ namespace MultiPlanner.WebApp.Tests
         [Test]
         public void TasksController_Index_Returns_TasksView()
         {
-            _taskServiceMock
-                .Setup(r => r.GetTasks(_userId))
+            _taskRepositoryMock
+                .Setup(r => r.GetAll(_userId))
                 .Returns(_userTasks);
-            var tasksCount = _userTasks.Count();
+            var tasksCount = _userTasks.Count;
 
             var viewResult = _controller.Index(_userId) as ViewResult;
 
@@ -58,15 +59,15 @@ namespace MultiPlanner.WebApp.Tests
         public void TasksController_Details_IfTaskExists_Returns_DetailsView()
         {
             var todoTaskId = _taskOne.TodoTaskId;
-            _taskServiceMock
-                .Setup(r => r.GetTask(todoTaskId))
+            _taskRepositoryMock
+                .Setup(r => r.Get(todoTaskId))
                 .Returns(_taskOne);
 
             var viewResult = _controller.Details(todoTaskId) as ViewResult;
 
             var model = viewResult?.Model as TaskDetailsViewModel;
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.Task, Is.EqualTo(_taskOne));
+            Assert.That(model.TodoTaskId, Is.EqualTo(_taskOne.TodoTaskId));
             Assert.That(viewResult?.ViewName == "Details");
         }
     }

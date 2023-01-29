@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MultiPlanner.WebApp.Repositories;
+using MultiPlanner.WebApp.DAL;
 
 #nullable disable
 
 namespace MultiPlanner.WebApp.Migrations
 {
-    [DbContext(typeof(MultiPlannerDbContext))]
+    [DbContext(typeof(MultiPlannerContext))]
     [Migration("20230122132653_Init")]
     partial class Init
     {

@@ -1,64 +1,121 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
+
 using MultiPlanner.WebApp.Entities;
 using MultiPlanner.WebApp.Models;
-using MultiPlanner.WebApp.Services;
+using MultiPlanner.WebApp.DAL;
 
 namespace MultiPlanner.WebApp.Controllers;
 
 public class TasksController : Controller
 {
-    private readonly ITaskService _todoTaskService;
+    private readonly ITaskRepository _repository;
+    private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-    public TasksController(ITaskService todoTaskService)
-    {
-        _todoTaskService = todoTaskService;
-    }
+    public TasksController(ITaskRepository repository) 
+        => _repository = repository;
 
-    public IActionResult Index(Guid userId)
+    // GET: /Tasks/
+    [HttpGet]
+    public IActionResult Index()
     {
-        var todoTasks = _todoTaskService.GetTasks(userId).ToList();
-        TasksViewModel todoTaskList = new()
+        var entities = _repository.GetAll(_userId).ToList();
+        TasksViewModel entitiesIndex = new()
         {
-            Tasks = todoTasks
+            Tasks = entities
         };
-        return View("Index", todoTaskList);
+        return View("Index", entitiesIndex);
     }
 
-    public IActionResult Details(int todoTaskId)
+    // GET: /Tasks/Details/5
+    [HttpGet]
+    public IActionResult Details(int id)
     {
-        var task = _todoTaskService.GetTask(todoTaskId);
+        var task = _repository.Get(id);
         if (task == null) return RedirectToAction("NotFound", "Home");
-        TaskDetailsViewModel taskDetails = new()
-        {
-            Task = task,
-            Title = task.Title
-        };
-        return View("Details", taskDetails);
+        var details = TaskDetailsViewModel.Build(task);
+        return View("Details", details);
     }
 
-    [HttpPost]
-    public IActionResult Details(int todoTaskId, [Bind("Title")] TaskDetailsViewModel viewModel)
+    // GET: /Tasks/Create
+    [HttpGet]
+    public IActionResult Create()
     {
-        var task = _todoTaskService.GetTask(todoTaskId);
-        if (task == null) return NotFound();
+        var details = new TaskDetailsViewModel();
+        return View("Details", details);
+    }
+
+    // POST: /Tasks/Update/5
+    [HttpPost]
+    public IActionResult Update(int id,
+        [Bind(include: "Title, ShortDescription, PlannedDeadline, Status")]
+        TaskDetailsViewModel viewModel)
+    {
+        if(viewModel.Title == "") ModelState.AddModelError("Title", "Title should not be empty.");
 
         try
         {
-            if (viewModel.Title == null || viewModel.Title == "") ModelState.AddModelError("Title",
-                    "Title should not be empty.");
+            var entity = _repository.Get(id);
+            entity ??= new TodoTask() { UserId = _userId };
 
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            task.Title = viewModel.Title;
-
-            var updatedTask = _todoTaskService.UpdateTask(task);
-            if (updatedTask == null) return RedirectToAction("Index");
-            var taskDetails = TaskDetailsViewModel.Build(updatedTask);
-            return View("Details", taskDetails);
+            if (ModelState.IsValid)
+            {
+                entity.Title = viewModel.Title;
+                entity.ShortDescription = viewModel.ShortDescription;
+                entity.PlannedDeadline = viewModel.PlannedDeadline;
+                entity.Status = viewModel.Status;
+                
+                if (entity.TodoTaskId == 0)
+                    _repository.Insert(entity);
+                else
+                    _repository.Update(entity);
+                _repository.Save();
+            }
+            else
+            {
+                return View("Details", viewModel);
+            }
         }
-        catch (Exception)
+        catch (DataException)
         {
-            return RedirectToAction("Index");
+            ModelState.AddModelError(string.Empty, "Unable to save changes.");
+            return View("Details", viewModel);
         }
+
+        return RedirectToAction("Index");
+    }
+
+    // GET: /Tasks/Delete/5
+    public ActionResult Delete(bool? saveChangesError = false, int id = 0)
+    {
+        if (saveChangesError.GetValueOrDefault())
+        {
+            ViewBag.ErrorMessage = "Delete failed, try again.";
+        }
+        var entity = _repository.Get(id);
+        return View("Delete", entity);
+    }
+
+    // POST: /Tasks/Delete/5
+    [HttpPost]
+    public ActionResult Delete(int id)
+    {
+        try
+        {
+            _repository.Get(id);
+            _repository.Delete(id);
+            _repository.Save();
+        }
+        catch (DataException)
+        {
+            return RedirectToAction("Delete", new { id, saveChangesError = true });
+        }
+        return RedirectToAction("Index");
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        _repository.Dispose();
+        base.Dispose(disposing);
     }
 }

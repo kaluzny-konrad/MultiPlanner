@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MultiPlanner.WebApp.Entities;
 
-namespace MultiPlanner.WebApp.Repositories;
+namespace MultiPlanner.WebApp.DAL;
 
-public class MultiPlannerDbContext : DbContext
+public class MultiPlannerContext : DbContext
 {
-    public MultiPlannerDbContext
-        (DbContextOptions<MultiPlannerDbContext> options)
+    public MultiPlannerContext(DbContextOptions<MultiPlannerContext> options)
         : base(options) { }
 
     public DbSet<TodoTask> TodoTasks { get; set; }

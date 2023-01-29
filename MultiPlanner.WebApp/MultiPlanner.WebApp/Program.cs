@@ -1,16 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using MultiPlanner.WebApp.Repositories;
-using MultiPlanner.WebApp.Services;
+using MultiPlanner.WebApp.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MultiPlannerDbContext>(options => {
+builder.Services.AddDbContext<MultiPlannerContext>(options => {
     options.UseSqlServer(
         builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-builder.Services.AddScoped<ITaskService, TaskService>();
 
 builder.Services.AddControllersWithViews();
 
