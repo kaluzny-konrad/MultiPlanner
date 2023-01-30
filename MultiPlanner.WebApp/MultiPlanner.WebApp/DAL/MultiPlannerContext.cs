@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MultiPlanner.WebApp.Entities;
 
 namespace MultiPlanner.WebApp.DAL;
 
-public class MultiPlannerContext : DbContext
+public class MultiPlannerContext : IdentityDbContext
 {
     public MultiPlannerContext(DbContextOptions<MultiPlannerContext> options)
         : base(options) { }

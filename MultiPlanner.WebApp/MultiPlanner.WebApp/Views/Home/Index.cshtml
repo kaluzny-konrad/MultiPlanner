@@ -4,11 +4,13 @@
     ViewData["Title"] = "Multi Planner";
 }
 
+@if(Model.isLoggedIn)
+{
 <div class="card-group d-flex justify-content-center">
     <div class="card text-white bg-success m-1" style="max-width: 18rem;">
         <div class="card-body text-center">
             <h3 class="card-title">Succeded Tasks:</h3>
-            <p class="card-text" style="font-size: 5em;">@Model.numberOfTasks</p>
+            <p class="card-text" style="font-size: 5em;">@Model.numberOfSuccededTasks</p>
         </div>
     </div>
 
@@ -19,3 +21,4 @@
         </div>
     </div>
 </div>
+}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MultiPlanner.WebApp.DAL;
 
@@ -11,9 +12,11 @@ using MultiPlanner.WebApp.DAL;
 namespace MultiPlanner.WebApp.Migrations
 {
     [DbContext(typeof(MultiPlannerContext))]
-    partial class MultiPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230130171919_IdentityAdded")]
+    partial class IdentityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
