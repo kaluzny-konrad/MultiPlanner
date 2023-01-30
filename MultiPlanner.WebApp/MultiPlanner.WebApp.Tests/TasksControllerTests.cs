@@ -5,13 +5,15 @@ using MultiPlanner.WebApp.Entities;
 using MultiPlanner.WebApp.Controllers;
 using MultiPlanner.WebApp.Models;
 using MultiPlanner.WebApp.DAL;
+using Microsoft.Extensions.Logging;
 
 namespace MultiPlanner.WebApp.Tests
 {
     public class TasksControllerTests
     {
         private static readonly Mock<ITaskRepository> _taskRepositoryMock = new();
-        private readonly TasksController _controller = new(_taskRepositoryMock.Object);
+        private static readonly Mock<ILogger<TasksController>> _loggerMock = new();
+        private readonly TasksController _controller = new(_taskRepositoryMock.Object, _loggerMock.Object);
 
         private static readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 

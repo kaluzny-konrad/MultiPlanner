@@ -1,22 +1,30 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 using MultiPlanner.WebApp.Entities;
-using MultiPlanner.WebApp.Models;
 using MultiPlanner.WebApp.DAL;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace MultiPlanner.WebApp.Controllers;
 
+[Authorize]
 public class TasksController : Controller
 {
     private readonly ILogger<TasksController> _logger;
     private readonly ITaskRepository _repository;
-    private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly Guid _userId = default;
 
-    public TasksController(ITaskRepository repository, ILogger<TasksController> logger)
+    public TasksController(ITaskRepository repository, ILogger<TasksController> logger, IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _logger = logger;
+        _httpContextAccessor = httpContextAccessor;
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if(userId != null)
+            _userId = Guid.Parse(userId);
     }
 
     // GET: /Tasks/

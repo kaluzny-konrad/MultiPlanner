@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using MultiPlanner.WebApp.DAL;
 using MultiPlanner.WebApp.Entities;
@@ -10,12 +11,21 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ITaskRepository _repository;
-    private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly Guid _userId = default;
+    private bool _isLoggedIn = false;
 
-    public HomeController(ILogger<HomeController> logger, ITaskRepository repository)
+    public HomeController(ILogger<HomeController> logger, ITaskRepository repository, IHttpContextAccessor httpContextAccessor)
     {
         _logger = logger;
         _repository = repository;
+        _httpContextAccessor = httpContextAccessor;
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId != null)
+        {
+            _userId = Guid.Parse(userId);
+            _isLoggedIn = true;
+        }
     }
 
     public IActionResult Index()
@@ -30,6 +40,7 @@ public class HomeController : Controller
         var numberOfOpenTasks = numberOfTasks - numberOfSuccededTasks;
         var viewModel = new HomeViewModel()
         {
+            isLoggedIn = _isLoggedIn,
             numberOfTasks = numberOfTasks,
             numberOfSuccededTasks = numberOfSuccededTasks,
             numberOfOpenTasks = numberOfOpenTasks,
