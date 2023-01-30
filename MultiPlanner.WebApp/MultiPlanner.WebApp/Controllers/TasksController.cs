@@ -9,11 +9,15 @@ namespace MultiPlanner.WebApp.Controllers;
 
 public class TasksController : Controller
 {
+    private readonly ILogger<TasksController> _logger;
     private readonly ITaskRepository _repository;
     private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-    public TasksController(ITaskRepository repository) 
-        => _repository = repository;
+    public TasksController(ITaskRepository repository, ILogger<TasksController> logger)
+    {
+        _repository = repository;
+        _logger = logger;
+    }
 
     // GET: /Tasks/
     [HttpGet]
