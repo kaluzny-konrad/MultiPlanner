@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MultiPlanner.WebApp.Repositories;
+using MultiPlanner.WebApp.DAL;
 
 #nullable disable
 
 namespace MultiPlanner.WebApp.Migrations
 {
-    [DbContext(typeof(MultiPlannerDbContext))]
+    [DbContext(typeof(MultiPlannerContext))]
     partial class MultiPlannerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

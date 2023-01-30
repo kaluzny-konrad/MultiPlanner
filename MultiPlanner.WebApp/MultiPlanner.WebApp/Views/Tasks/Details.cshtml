@@ -1,0 +1,55 @@
+﻿@using MultiPlanner.WebApp.Entities
+
+@model TodoTask
+@{
+    ViewData["Title"] = "Task";
+}
+
+<h3>Task</h3>
+
+<form asp-controller="tasks" asp-action="Details" asp-route-id="@Model.TodoTaskId">
+
+    <div class="form-group">
+        <label for="Title" class="control-label">Title</label>
+        <input type="text" class="form-control" name="Title" asp-for="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ShortDescription">Short Description</label>
+        <input type="text" class="form-control" name="ShortDescription" asp-for="ShortDescription" />
+        <span asp-validation-for="ShortDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="PlannedDeadline">Planned Deadline</label>
+        <input class="form-control" name="PlannedDeadline" asp-for="PlannedDeadline" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+        <span asp-validation-for="PlannedDeadline" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <select class="form-control" name="Status" 
+            asp-for="Status">
+            <option value="0">Removed</option>
+            <option value="1">ToDo</option>
+            <option value="2">In Progress</option>
+            <option value="3">Success</option>
+            <option value="4">Failed</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <input type="submit" class="btn btn-primary" name="submit" value="Save changes" />
+</form>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+
+        });
+    </script>
+}

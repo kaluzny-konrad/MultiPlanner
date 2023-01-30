@@ -1,25 +1,82 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
+
+using MultiPlanner.WebApp.Entities;
 using MultiPlanner.WebApp.Models;
-using MultiPlanner.WebApp.Services;
+using MultiPlanner.WebApp.DAL;
 
 namespace MultiPlanner.WebApp.Controllers;
 
 public class TasksController : Controller
 {
-    private readonly ITaskService _todoTaskService;
+    private readonly ILogger<TasksController> _logger;
+    private readonly ITaskRepository _repository;
+    private readonly Guid _userId = Guid.Parse("00000000-0000-0000-0000-000000000000");
 
-    public TasksController(ITaskService todoTaskService)
+    public TasksController(ITaskRepository repository, ILogger<TasksController> logger)
     {
-        _todoTaskService = todoTaskService;
+        _repository = repository;
+        _logger = logger;
     }
 
-    public IActionResult Index(Guid userId)
+    // GET: /Tasks/
+    [HttpGet]
+    public IActionResult Index()
     {
-        var todoTasks = _todoTaskService.GetTasks(userId).ToList();
-        TasksViewModel todoTaskList = new()
+        var entities = _repository
+            .GetAll(_userId)
+            .Where(e => e.Status != TaskStatuses.Removed)
+            .ToList();
+        return View("Index", entities);
+    }
+
+    // GET: /Tasks/Details/5
+    [HttpGet]
+    public IActionResult Details(int id)
+    {
+        var task = _repository.Get(id);
+        if (task == null) return RedirectToAction("NotFound", "Home");
+        return View("Details", task);
+    }
+
+    // POST: /Tasks/Details/5
+    [HttpPost]
+    public IActionResult Details(int id, [Bind] TodoTask todoTask)
+    {
+        todoTask.TodoTaskId = id;
+        try
         {
-            Tasks = todoTasks
-        };
-        return View("Index", todoTaskList);
+            if (ModelState.IsValid)
+            {
+                if (todoTask.TodoTaskId == 0)
+                {
+                    todoTask.UserId = _userId;
+                    _repository.Insert(todoTask);
+                }
+                else
+                    _repository.Update(todoTask);
+                _repository.Save();
+                return RedirectToAction("Index");
+            }
+        }
+        catch (DataException)
+        {
+            ModelState.AddModelError(string.Empty, "Unable to save changes.");
+        }
+
+        return View("Details", todoTask);
+    }
+
+    // GET: /Tasks/Create
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View("Details", new TodoTask());
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        _repository.Dispose();
+        base.Dispose(disposing);
     }
 }
